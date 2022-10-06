@@ -43,7 +43,8 @@ export class TestErrorsComponent implements OnInit {
   }
 
   get400ValidationError(){
-    this.http.get(this.baseUrl + 'account/register').subscribe({
+    this.http.post(this.baseUrl + 'account/register', {}).subscribe({
+      next: respose => console.log(respose),
       error: error => console.log(error)
     })
   }
