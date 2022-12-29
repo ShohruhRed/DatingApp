@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -24,17 +24,27 @@ export class MembersService {
     if(page !== null && itemsPerPage !== null){
       params = params.append('pageNumber', page.toString());
       params = params.append('pageSize', itemsPerPage.toString());
-    }
-    return this.http.get<Member[]>(this.baseUrl + 'users', {observe: 'response', params}).pipe(
-      map(response => {
-        this.paginatedResult.result = response.body;
+    }    
 
-        if(response.headers.get('Pagination') !== null){
-          this.paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
-        }
-        return this.paginatedResult;
-      })
-    )
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      observe: 'response' as 'response'
+    };
+    
+
+
+    return this.http.get<Member[]>(this.baseUrl + 'users', { observe: 'response', params})
+     .pipe(
+       map(response => {
+         this.paginatedResult.result = response.body;
+         if (response.headers.get('Pagination') !== null) {
+           this.paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+         }         
+         //console.log(response.headers.get('Pagination'));
+         
+         return this.paginatedResult;
+       })
+     );
   }
 
   getMember(username: string) {
