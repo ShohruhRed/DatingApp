@@ -28,10 +28,10 @@ namespace API.Data
                 .IsRequired();
 
             builder.Entity<AppRole>()
-            .HasMany(ur => ur.UserRoles)
-            .WithOne(u => u.Role)
-            .HasForeignKey(ur => ur.RoleId)
-            .IsRequired();
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
 
 
             builder.Entity<UserLike>()
