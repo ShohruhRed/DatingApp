@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Extensions;
 using System.Text.Json;
 
 namespace API.Data
@@ -23,15 +24,9 @@ namespace API.Data
             {
                 user.UserName = user.UserName.ToLower();
 
-                await userManager.CreateAsync(user, "seedPassword");
+                user.PasswordHash = userManager.PasswordHasher.HashPassword(user, "seedPassword");
 
-                result  = await userManager.CreateAsync(user);
-
-                if (!result.Succeeded)
-                {
-                    foreach (IdentityError error in result.Errors)
-                        Console.WriteLine($"Oops! {error.Description} ({error.Code})");
-                }
+                await userManager.CreateAsync(user);                           
                     
             }           
         }
