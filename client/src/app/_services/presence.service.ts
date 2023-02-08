@@ -32,7 +32,7 @@ export class PresenceService {
     
       this.hubConnection.on('UserIsOnline', username => {
         this.onlineUsers$.pipe(take(1)).subscribe(usernames => {
-          this.onlineUsersSource.next([...usernames, username] )
+          this.onlineUsersSource.next([...usernames, username])
         })
       })
 
@@ -46,7 +46,7 @@ export class PresenceService {
         this.onlineUsersSource.next(username);
       })
 
-      this.hubConnection.on('NewMessageRecieved', ({username, knownAs}) => {
+      this.hubConnection.on('NewMessageReceived', ({username, knownAs}) => {
         this.toastr.info(knownAs + ' has sent you a new message!')
           .onTap
           .pipe(take(1))
