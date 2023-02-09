@@ -10,7 +10,7 @@ namespace API.Data
 
         public UnitOfWork(DataContext context, IMapper mapper)
         {
-            _context = _context;
+            _context = context;
             _mapper = mapper;
         }
         public IUserRepository UserRepository => new UserRepository(_context, _mapper);
