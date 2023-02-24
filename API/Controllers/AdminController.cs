@@ -79,7 +79,15 @@ namespace API.Controllers
         {
             var photo = await
            _unitOfWork.PhotoRepository.GetPhotoById(photoId);
+
+            if (photo == null) return NotFound("Could not find photo");
+
             photo.IsApproved = true;
+
+            var user = await _unitOfWork.UserRepository.GetUserByPhotoId(photoId);
+
+            if (!user.Photos.Any(x => x.IsMain)) photo.IsMain = true;
+
             await _unitOfWork.Complete();
             return Ok();
         }
@@ -107,6 +115,5 @@ namespace API.Controllers
 
             return Ok();
         }
-
     }
 }

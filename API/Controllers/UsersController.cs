@@ -88,23 +88,16 @@ namespace API.Controllers
             {
                 Url = result.SecureUrl.AbsoluteUri,
                 PublicId = result.PublicId
-            };
-
-            if(user.Photos.Count == 0)
-            {
-                photo.IsMain = true;
-            }
+            };            
 
             user.Photos.Add(photo);
 
             if(await _unitOfWork.Complete())
             {                
                 return CreatedAtRoute("GetUser", new {username = user.UserName},_mapper.Map<PhotoDto>(photo));
-            }           
-               
+            }                        
 
-            return BadRequest("Problem adding photo");
-            
+            return BadRequest("Problem adding photo");            
         }
 
         [HttpPut("set-main-photo/{photoId}")]
