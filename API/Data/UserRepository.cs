@@ -27,9 +27,19 @@ namespace API.Data
                 .SingleOrDefaultAsync();
         }
 
+        public async Task<MemberDto> GetMemberAsync(string username, bool isCurrentUser)
+        {
+            var query = _context.Users
+            .Where(x => x.UserName == username)
+            .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
+            .AsQueryable();
+            if (isCurrentUser) query = query.IgnoreQueryFilters();
+            return await query.FirstOrDefaultAsync();
+        }
+
         public async Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams)
         {
-            var query = _context.Users.AsQueryable();              
+            var query = _context.Users.AsQueryable();
 
             query = query.Where(u => u.UserName != userParams.CurrentUsername);
             query = query.Where(u => u.Gender == userParams.Gender);
@@ -46,9 +56,9 @@ namespace API.Data
             };
 
             return await PagedList<MemberDto>.CreateAsync(query.ProjectTo<MemberDto>(_mapper
-                .ConfigurationProvider).AsNoTracking(), 
+                .ConfigurationProvider).AsNoTracking(),
                     userParams.PageNumber, userParams.PageSize);
-                
+
         }
 
         public async Task<AppUser> GetUserByIdAsync(int id)
@@ -75,7 +85,7 @@ namespace API.Data
             return await _context.Users
                 .Include(p => p.Photos)
                 .ToListAsync();
-        }      
+        }
 
         public void Update(AppUser user)
         {
