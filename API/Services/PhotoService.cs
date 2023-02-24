@@ -47,7 +47,6 @@ namespace API.Services
             var result = await _cloudinary.DestroyAsync(deleteParams);
 
             return result;
-
         }
     }
 }
